@@ -22,7 +22,7 @@ I recommend making `unzip-jp.py` executable and simlinking it to
 
 ```bash
 chmod +x unzip-jp.py
-ln -s unzip-jp.py ~/bin/unzip-jp
+ln -s $PWD/unzip-jp.py ~/bin/unzip-jp
 ```
 
 Then you can call it as
