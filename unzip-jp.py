@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 
-# Extracts a zip archive while converting file names from Shift-JIS encoding to UTF-8
+# Extracts a zip archive while converting file names from Shift-JIS encoding to UTF-8.
+#
+# Example:
+#   python unzip-jp.py archive.zip
+#
+#       Creates a directory `archive` and extracts the archive there.
+#
 import zipfile
 import sys
 import os
