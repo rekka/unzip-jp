@@ -24,7 +24,19 @@ if not os.path.exists(directory):
 
 with zipfile.ZipFile(name, 'r') as z:
     for f in z.infolist():
-        uf = f.filename.decode('sjis').encode('utf8')
-        with open(os.path.join(directory, uf), 'w') as dest:
+        try:
+            uf = f.filename.decode('sjis').encode('utf8')
+        except:
+            uf = f.filename.decode('shift_jisx0213').encode('utf8')
+        print(uf)
+        filename=os.path.join(directory, uf)
+        # create directories if necessary
+        if not os.path.exists(os.path.dirname(filename)):
+            try:
+                os.makedirs(os.path.dirname(filename))
+            except OSError as exc: # Guard against race condition
+                if exc.errno != errno.EEXIST:
+                    raise
+        with open(filename, 'w') as dest:
             dest.write(z.read(f))
 
