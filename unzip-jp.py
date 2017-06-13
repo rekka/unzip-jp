@@ -11,11 +11,18 @@ import zipfile
 import sys
 import os
 
-if len(sys.argv) != 2:
+if len(sys.argv) < 2:
     print('No archive name.')
+    print('')
+    print('Usage: unzip-jp archive [password]')
     exit(1)
 
 name = sys.argv[1]
+
+if len(sys.argv) > 2:
+    password = sys.argv[2]
+else:
+    password = None
 
 directory = os.path.splitext(os.path.basename(name))[0]
 
@@ -23,6 +30,8 @@ if not os.path.exists(directory):
     os.makedirs(directory)
 
 with zipfile.ZipFile(name, 'r') as z:
+    if password:
+        z.setpassword(password)
     for f in z.infolist():
         try:
             uf = f.filename.decode('sjis').encode('utf8')
