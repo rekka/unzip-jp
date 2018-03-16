@@ -54,6 +54,8 @@ with zipfile.ZipFile(name, 'r') as z:
             except OSError as exc: # Guard against race condition
                 if exc.errno != errno.EEXIST:
                     raise
-        with open(filename, 'w') as dest:
-            dest.write(z.read(f))
+        # don't try to write to directories
+        if not filename.endswith('/'):
+            with open(filename, 'w') as dest:
+                dest.write(z.read(f))
 
