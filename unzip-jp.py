@@ -56,6 +56,6 @@ with zipfile.ZipFile(name, 'r') as z:
                     raise
         # don't try to write to directories
         if not filename.endswith('/'):
-            with open(filename, 'w') as dest:
+            with open(filename, 'wb') as dest:
                 dest.write(z.read(f))
 
