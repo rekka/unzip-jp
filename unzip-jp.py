@@ -43,7 +43,9 @@ with zipfile.ZipFile(name, 'r') as z:
             uf = codecs.decode(bad_filename, 'sjis')
         except:
             uf = codecs.decode(bad_filename, 'shift_jisx0213')
-        print(uf)
+        # need to print repr in Python 2 as we may encounter UnicodeEncodeError
+        # when printing to a Windows console
+        print(repr(uf))
         filename=os.path.join(directory, uf)
         # create directories if necessary
         if not os.path.exists(os.path.dirname(filename)):
