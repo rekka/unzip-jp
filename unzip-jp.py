@@ -10,6 +10,7 @@
 import zipfile
 import sys
 import os
+import codecs
 
 if len(sys.argv) < 2:
     print('No archive name.')
@@ -33,11 +34,18 @@ with zipfile.ZipFile(name, 'r') as z:
     if password:
         z.setpassword(password)
     for f in z.infolist():
+        bad_filename = f.filename
+        if bytes != str:
+            # Python 3 - decode filename into bytes
+            # assume CP437 - these zip files were from Windows anyway
+            bad_filename = bytes(bad_filename, 'cp437')
         try:
-            uf = f.filename.decode('sjis').encode('utf8')
+            uf = codecs.decode(bad_filename, 'sjis')
         except:
-            uf = f.filename.decode('shift_jisx0213').encode('utf8')
-        print(uf)
+            uf = codecs.decode(bad_filename, 'shift_jisx0213')
+        # need to print repr in Python 2 as we may encounter UnicodeEncodeError
+        # when printing to a Windows console
+        print(repr(uf))
         filename=os.path.join(directory, uf)
         # create directories if necessary
         if not os.path.exists(os.path.dirname(filename)):
@@ -46,6 +54,8 @@ with zipfile.ZipFile(name, 'r') as z:
             except OSError as exc: # Guard against race condition
                 if exc.errno != errno.EEXIST:
                     raise
-        with open(filename, 'w') as dest:
-            dest.write(z.read(f))
+        # don't try to write to directories
+        if not filename.endswith('/'):
+            with open(filename, 'wb') as dest:
+                dest.write(z.read(f))
 
