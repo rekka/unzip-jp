@@ -32,7 +32,7 @@ if not os.path.exists(directory):
 
 with zipfile.ZipFile(name, 'r') as z:
     if password:
-        z.setpassword(password)
+        z.setpassword(password.encode('cp850','replace'))
     for f in z.infolist():
         bad_filename = f.filename
         if bytes != str:
