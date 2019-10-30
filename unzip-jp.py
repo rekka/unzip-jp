@@ -13,9 +13,8 @@ import os
 import codecs
 
 if len(sys.argv) < 2:
-    print('No archive name.')
-    print('')
-    print('Usage: unzip-jp archive [password]')
+    sys.stderr.write('Error: No archive name specified.' + os.linesep)
+    print(('Usage: {} <archive_name> [password]').format(sys.argv[0]))
     exit(1)
 
 name = sys.argv[1]
